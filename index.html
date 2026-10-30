@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#14213d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Chemistry Test App by Ram</title>
+<style>
+:root{--navy:#14213d;--blue:#2563eb;--bg:#f4f6fb;--green:#16803c;--red:#c62828;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#172033}
+header{background:var(--navy);color:white;padding:22px 16px;text-align:center}
+header h1{margin:0 0 7px;font-size:23px}header p{margin:0;color:#dbeafe;font-size:14px}
+main{max-width:850px;margin:18px auto;padding:0 12px 40px}
+.panel,.question,.result{background:white;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 2px 10px #14213d12}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.stat{background:#e8eefc;padding:9px 12px;border-radius:10px;font-size:13px}
+button{border:0;border-radius:10px;padding:12px 16px;background:var(--blue);color:white;font-weight:bold;font-size:15px;cursor:pointer}
+button.secondary{background:#e2e8f0;color:#172033}button:disabled{opacity:.5}
+select{padding:10px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px}
+#quiz{display:none}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.progress{height:8px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin:12px 0}.bar{height:100%;background:#16a34a;width:0}
+.qhead{font-size:12px;color:var(--muted);font-weight:bold;text-transform:uppercase;letter-spacing:.4px}
+.qtext{font-size:18px;font-weight:bold;line-height:1.45;margin:10px 0}
+.option{display:block;border:1px solid #dbe2ee;border-radius:10px;padding:12px;margin:8px 0;cursor:pointer;line-height:1.35}
+.option input{margin-right:9px;accent-color:var(--blue)}.option:has(input:checked){border-color:var(--blue);background:#eff6ff}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:15px}
+.small{font-size:13px;color:var(--muted)}.hidden{display:none}
+.correct{color:var(--green);font-weight:bold}.wrong{color:var(--red);font-weight:bold}
+.reviewitem{border-top:1px solid #e2e8f0;padding:13px 0}.reviewitem p{margin:7px 0;line-height:1.45}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:500px){header h1{font-size:20px}.qtext{font-size:16px}.panel,.question,.result{padding:13px}}
+</style>
+</head>
+<body>
+<header><h1>Chemistry Test App by Ram</h1><p>Class 12 UP Board • All 10 chapters • Practice for better marks</p></header>
+<main>
+<section id="home" class="panel">
+<h2>Ready for your final test?</h2>
+<p>This app contains a question bank covering all 10 Class 12 Chemistry chapters.</p>
+<div class="stats">
+<div class="stat"><b>60</b> MCQs in question bank</div>
+<div class="stat"><b>30</b> questions per test</div>
+<div class="stat"><b>45 min</b> time limit</div>
+<div class="stat"><b>1 mark</b> per question</div>
+</div>
+<p><b>Test pattern:</b> 3 randomly selected questions from each chapter, so every test covers all 10 chapters. No negative marking.</p>
+<label for="count"><b>Questions per test:</b> </label>
+<select id="count"><option value="30" selected>30 questions (3 per chapter)</option><option value="40">40 questions (4 per chapter)</option><option value="50">50 questions (5 per chapter)</option><option value="60">60 questions (all questions)</option></select>
+<p class="small">Use this as a practice test. Check your UP Board syllabus and textbook for final exam preparation.</p>
+<button id="start">Start Test</button>
+</section>
+<section id="quiz">
+<div class="panel">
+<div class="topline"><b id="counter">Question 1 of 30</b><b id="timer">45:00</b></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="topline"><span class="small" id="chapter"></span><span class="small" id="answered">Answered: 0</span></div>
+</div>
+<div class="question">
+<div class="qhead" id="qnum"></div><div class="qtext" id="qtext"></div><div id="options"></div>
+<div class="nav"><button class="secondary" id="prev">Previous</button><button id="next">Next</button></div>
+</div>
+<div class="panel topline"><button class="secondary" id="end">Submit Test</button><span class="small">You can move between questions before submitting.</span></div>
+</section>
+<section id="results" class="result hidden"></section>
+<footer>Created by Ram for Class 12 students • Made for offline revision • Your answers stay on this device only.</footer>
+</main>
+<script>
+const BANK = [["Solutions", "Which concentration term is independent of temperature?", ["Molarity", "Molality", "Normality", "Formality"], 1, "Molality is moles of solute per kilogram of solvent; mass does not change with temperature."], ["Solutions", "According to Raoult's law, the partial vapour pressure of a component is:", ["p = p°/x", "p = x p°", "p = x/p°", "p = p° − x"], 1, "For an ideal solution, pᵢ = xᵢpᵢ°."], ["Solutions", "The van't Hoff factor for complete dissociation of NaCl in water is approximately:", ["1", "2", "3", "0.5"], 1, "NaCl produces two ions, Na⁺ and Cl⁻, so i is approximately 2."], ["Solutions", "Which property is used to determine the molar mass of polymers most suitably?", ["Elevation in boiling point", "Depression in freezing point", "Osmotic pressure", "Relative lowering of vapour pressure"], 2, "Osmotic pressure is measurable even for very dilute polymer solutions and large molar masses."], ["Solutions", "For an ideal solution, which relation is correct?", ["ΔHmix = 0", "ΔVmix > 0", "ΔHmix < 0", "ΔVmix < 0"], 0, "Ideal solutions obey Raoult's law and have zero enthalpy and volume change on mixing."], ["Solutions", "A solution showing positive deviation from Raoult's law has:", ["A–B attractions stronger than A–A and B–B", "A–B attractions weaker than A–A and B–B", "No intermolecular forces", "Zero vapour pressure"], 1, "Weaker A–B interactions allow molecules to escape more easily, increasing vapour pressure."], ["Electrochemistry", "The SI unit of conductivity is:", ["S m⁻¹", "S m² mol⁻¹", "ohm m", "mol m⁻³"], 0, "Conductivity (κ) is measured in siemens per metre, S m⁻¹."], ["Electrochemistry", "In a galvanic cell, oxidation takes place at the:", ["Cathode", "Salt bridge", "Anode", "Electrolyte only"], 2, "Oxidation always occurs at the anode; in a galvanic cell the anode is negative."], ["Electrochemistry", "The standard electrode potential of the standard hydrogen electrode is:", ["+1.00 V", "0.00 V", "−1.00 V", "+0.76 V"], 1, "The standard hydrogen electrode is assigned a potential of exactly zero volts."], ["Electrochemistry", "Which equation relates cell potential to Gibbs energy?", ["ΔG = nFE", "ΔG = −nFEcell", "ΔG = RT ln K", "ΔG = −RT"], 1, "For a cell reaction, ΔG = −nFEcell."], ["Electrochemistry", "During electrolysis of molten NaCl, the product at the cathode is:", ["Cl₂", "Na", "H₂", "O₂"], 1, "Na⁺ ions gain electrons at the cathode to form sodium metal."], ["Electrochemistry", "On dilution, the molar conductivity of a weak electrolyte generally:", ["Decreases", "Remains constant", "Increases sharply", "Becomes zero"], 2, "Dilution increases ionisation of weak electrolytes, so molar conductivity rises sharply."], ["Chemical Kinetics", "The unit of a first-order rate constant is:", ["mol L⁻¹ s⁻¹", "s⁻¹", "L mol⁻¹ s⁻¹", "mol⁻¹ L s⁻¹"], 1, "For a first-order reaction, k has the unit time⁻¹, commonly s⁻¹."], ["Chemical Kinetics", "The half-life of a first-order reaction is:", ["Directly proportional to initial concentration", "Inversely proportional to initial concentration", "Independent of initial concentration", "Always zero"], 2, "t₁/₂ = 0.693/k, so it does not depend on initial concentration."], ["Chemical Kinetics", "A catalyst increases the rate of a reaction by:", ["Increasing ΔH", "Lowering activation energy", "Increasing equilibrium constant", "Changing products"], 1, "A catalyst provides an alternative pathway with lower activation energy."], ["Chemical Kinetics", "For a zero-order reaction, the rate is:", ["Proportional to concentration", "Inversely proportional to concentration", "Independent of reactant concentration", "Proportional to square of concentration"], 2, "Rate = k for a zero-order reaction."], ["Chemical Kinetics", "The slope of a plot of ln k versus 1/T is:", ["Ea/R", "−Ea/R", "−R/Ea", "Ea"], 1, "From Arrhenius equation, ln k = ln A − Ea/RT; slope is −Ea/R."], ["Chemical Kinetics", "The order of a reaction is determined:", ["From balanced equation always", "Experimentally", "From molecularity only", "From product colour"], 1, "Reaction order is obtained from the experimentally determined rate law."], ["d- and f-Block Elements", "Which of the following is not a transition element?", ["Fe", "Cu", "Zn", "Cr"], 2, "Zn and Zn²⁺ have completely filled 3d¹⁰ configurations, so Zn is not a transition element."], ["d- and f-Block Elements", "The colour of many transition-metal ions is mainly due to:", ["s–s transition", "d–d transition", "Nuclear transition", "Only ionic size"], 1, "Partially filled d orbitals allow d–d electronic transitions that absorb visible light."], ["d- and f-Block Elements", "Which ion has a d⁰ configuration?", ["Ti³⁺", "V²⁺", "Sc³⁺", "Mn²⁺"], 2, "Sc has [Ar]3d¹4s²; Sc³⁺ loses these three electrons and becomes [Ar], i.e. d⁰."], ["d- and f-Block Elements", "The highest oxidation state shown by manganese is:", ["+2", "+4", "+6", "+7"], 3, "Manganese can show +7 oxidation state, for example in permanganate ion."], ["d- and f-Block Elements", "Lanthanoid contraction is mainly due to:", ["Poor shielding by 4f electrons", "Strong shielding by 4f electrons", "Increase in principal quantum number", "Decrease in nuclear charge"], 0, "4f electrons shield nuclear charge poorly, causing gradual decrease in lanthanoid ionic radii."], ["d- and f-Block Elements", "Which potassium dichromate species is orange in acidic solution?", ["CrO₄²⁻", "Cr₂O₇²⁻", "Cr³⁺", "CrO₂"], 1, "Dichromate ion, Cr₂O₇²⁻, is orange; chromate ion is yellow."], ["Coordination Compounds", "The coordination number of cobalt in [Co(NH₃)₆]Cl₃ is:", ["3", "4", "6", "9"], 2, "Six NH₃ ligands are directly bonded to cobalt, so coordination number is 6."], ["Coordination Compounds", "The oxidation state of Fe in [Fe(CN)₆]⁴⁻ is:", ["+2", "+3", "+4", "0"], 0, "Let oxidation state be x: x + 6(−1) = −4, hence x = +2."], ["Coordination Compounds", "Which ligand is bidentate?", ["NH₃", "Cl⁻", "en (ethane-1,2-diamine)", "H₂O"], 2, "Ethane-1,2-diamine has two donor nitrogen atoms and binds through both."], ["Coordination Compounds", "The geometry of [Ni(CO)₄] is:", ["Square planar", "Tetrahedral", "Octahedral", "Linear"], 1, "Ni(CO)₄ is a diamagnetic tetrahedral complex."], ["Coordination Compounds", "The IUPAC name of [Co(NH₃)₆]Cl₃ is:", ["Hexaamminecobalt(III) chloride", "Hexaamminecobalt(II) chloride", "Cobalt hexachloride", "Hexachlorocobaltate(III)"], 0, "The complex cation is [Co(NH₃)₆]³⁺, named hexaamminecobalt(III)."], ["Coordination Compounds", "Which complex is expected to be diamagnetic?", ["[FeF₆]³⁻", "[CoF₆]³⁻", "[Ni(CO)₄]", "[Mn(H₂O)₆]²⁺"], 2, "Ni in Ni(CO)₄ is d¹⁰; all electrons are paired."], ["Haloalkanes and Haloarenes", "Which alkyl halide undergoes SN1 reaction fastest?", ["CH₃Cl", "C₂H₅Cl", "(CH₃)₃CCl", "CH₃CH₂CH₂Cl"], 2, "Tertiary carbocation is most stable, so tert-butyl chloride reacts fastest by SN1."], ["Haloalkanes and Haloarenes", "Finkelstein reaction commonly uses:", ["NaI in acetone", "AgF in water", "NaOH in ethanol", "H₂/Pd"], 0, "NaI in acetone converts alkyl chlorides or bromides into alkyl iodides."], ["Haloalkanes and Haloarenes", "Chlorobenzene is less reactive towards nucleophilic substitution because:", ["C–Cl bond has partial double-bond character", "It is ionic", "Benzene ring is saturated", "Chlorine has no lone pairs"], 0, "Resonance gives the C–Cl bond partial double-bond character, making it stronger."], ["Haloalkanes and Haloarenes", "Wurtz reaction uses:", ["Na in dry ether", "Zn in water", "KOH in alcohol", "H₂SO₄"], 0, "Two alkyl halide molecules couple in the presence of sodium in dry ether."], ["Haloalkanes and Haloarenes", "Which compound gives a white precipitate with alcoholic AgNO₃ most readily?", ["Chlorobenzene", "Benzyl chloride", "Fluorobenzene", "Chloromethane"], 1, "Benzyl chloride forms a resonance-stabilised benzyl carbocation, facilitating ionisation."], ["Haloalkanes and Haloarenes", "The major product of nitration of chlorobenzene is:", ["Only meta-nitrochlorobenzene", "Ortho- and para-nitrochlorobenzene", "Only benzene", "Only 2,4,6-trinitrochlorobenzene"], 1, "Chlorine is deactivating but ortho/para directing due to resonance."], ["Alcohols, Phenols and Ethers", "Phenol reacts with bromine water to form:", ["Bromobenzene", "2,4,6-tribromophenol", "Benzoic acid", "Anisole"], 1, "The –OH group strongly activates the ring and directs bromination to ortho and para positions."], ["Alcohols, Phenols and Ethers", "Neutral FeCl₃ gives which colour with phenol?", ["Violet", "Brick red", "White", "Colourless"], 0, "Phenol forms a coloured complex with neutral ferric chloride, commonly violet."], ["Alcohols, Phenols and Ethers", "Ethanol gives ethene on heating with concentrated H₂SO₄ at:", ["373 K", "413 K", "443 K", "523 K"], 2, "At about 443 K, ethanol undergoes dehydration to ethene."], ["Alcohols, Phenols and Ethers", "Williamson ether synthesis involves:", ["Sodium alkoxide and a primary alkyl halide", "Aldehyde and ammonia", "Phenol and bromine", "Alcohol and NaCl"], 0, "An alkoxide ion reacts with an alkyl halide, usually by SN2, to form an ether."], ["Alcohols, Phenols and Ethers", "The IUPAC name of anisole is:", ["Methoxybenzene", "Hydroxybenzene", "Methylbenzene", "Ethoxybenzene"], 0, "Anisole has structure C₆H₅OCH₃ and is named methoxybenzene."], ["Alcohols, Phenols and Ethers", "Which is more acidic?", ["Ethanol", "Phenol", "Ethane", "Diethyl ether"], 1, "Phenoxide ion is resonance-stabilised, making phenol more acidic than ethanol."], ["Aldehydes, Ketones and Carboxylic Acids", "Tollens' reagent generally gives a silver mirror with:", ["Aldehydes", "Alkanes", "Ethers", "Most ketones"], 0, "Aldehydes reduce Tollens' reagent to metallic silver."], ["Aldehydes, Ketones and Carboxylic Acids", "Fehling's solution is reduced by:", ["Ethanal", "Benzophenone", "Acetone", "Benzaldehyde"], 0, "Aliphatic aldehydes such as ethanal give a brick-red Cu₂O precipitate."], ["Aldehydes, Ketones and Carboxylic Acids", "Clemmensen reduction uses:", ["Zn(Hg)/concentrated HCl", "NH₂NH₂/KOH", "NaBH₄", "H₂/Ni only"], 0, "Clemmensen reduction converts the carbonyl group into –CH₂– under acidic conditions."], ["Aldehydes, Ketones and Carboxylic Acids", "Cannizzaro reaction is shown by aldehydes that:", ["Have at least one alpha hydrogen", "Have no alpha hydrogen", "Are all ketones", "Contain –COOH"], 1, "Aldehydes without alpha hydrogen undergo disproportionation in concentrated alkali."], ["Aldehydes, Ketones and Carboxylic Acids", "The iodoform test gives a yellow precipitate of:", ["CHI₃", "CHCl₃", "CHBr₃", "C₂H₅I"], 0, "The yellow precipitate is triiodomethane, CHI₃."], ["Aldehydes, Ketones and Carboxylic Acids", "Carboxylic acids have high boiling points mainly due to:", ["Dimer formation through hydrogen bonding", "Ionic bonding", "Low molecular mass", "Absence of polarity"], 0, "Two carboxylic acid molecules form hydrogen-bonded dimers, raising boiling points."], ["Amines", "Aniline is less basic than ethylamine because:", ["Its nitrogen lone pair is delocalised by resonance", "It has no lone pair", "It is ionic", "Ethylamine has no nitrogen"], 0, "In aniline, the nitrogen lone pair is delocalised into the benzene ring and is less available for protonation."], ["Amines", "Hoffmann bromamide degradation gives an amine with:", ["Same number of carbon atoms", "One carbon atom less", "One carbon atom more", "No nitrogen"], 1, "The carbonyl carbon is lost as carbonate, giving a primary amine with one fewer carbon."], ["Amines", "Carbylamine test is given by:", ["Primary amines", "Secondary amines", "Tertiary amines", "All amines"], 0, "Only primary amines form foul-smelling isocyanides with CHCl₃ and alcoholic KOH."], ["Amines", "Diazotisation of aniline is carried out at:", ["273–278 K", "300–310 K", "373 K", "443 K"], 0, "Low temperature stabilises the benzene diazonium salt."], ["Amines", "Gabriel phthalimide synthesis is used to prepare:", ["Primary aliphatic amines", "Secondary amines", "Tertiary amines", "Aryl halides"], 0, "Gabriel synthesis gives primary aliphatic amines and is not suitable for aryl amines."], ["Amines", "Which is generally the strongest base in aqueous solution among these?", ["Aniline", "Ammonia", "Ethylamine", "Nitrobenzene"], 2, "The +I effect of the ethyl group increases electron density on nitrogen; ethylamine is more basic."], ["Biomolecules", "Which of the following is a reducing sugar?", ["Sucrose", "Glucose", "Starch", "Cellulose"], 1, "Glucose has a free anomeric carbon and can reduce Tollens' or Fehling's reagent."], ["Biomolecules", "The linkage joining two amino acids in a protein is:", ["Glycosidic linkage", "Peptide linkage", "Phosphodiester linkage", "Hydrogen bond"], 1, "A peptide bond is the –CO–NH– linkage formed between amino acids."], ["Biomolecules", "Which vitamin is water-soluble?", ["Vitamin A", "Vitamin D", "Vitamin E", "Vitamin C"], 3, "Vitamin C and B-complex vitamins are water-soluble."], ["Biomolecules", "The sugar present in DNA is:", ["Ribose", "2-deoxyribose", "Glucose", "Fructose"], 1, "DNA contains 2-deoxyribose, while RNA contains ribose."], ["Biomolecules", "The base present in RNA but absent in DNA is:", ["Adenine", "Guanine", "Cytosine", "Uracil"], 3, "RNA contains uracil in place of thymine."], ["Biomolecules", "Amino acids in aqueous solution commonly exist as:", ["Free radicals", "Zwitterions", "Only cations", "Only anions"], 1, "Amino acids often have –NH₃⁺ and –COO⁻ groups simultaneously, forming zwitterions."]];
+const chapters = [...new Set(BANK.map(q=>q[0]))];
+let test=[],answers={},pos=0,timeLeft=45*60,tick=null,finished=false;
+const $=id=>document.getElementById(id);
+function shuffle(a){let b=[...a];for(let i=b.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function startTest(){
+ const n=Number($('count').value), per=n/10;
+ test=[];
+ chapters.forEach(ch=>{test.push(...shuffle(BANK.filter(q=>q[0]===ch)).slice(0,per))});
+ test=shuffle(test);answers={};pos=0;timeLeft=45*60;finished=false;
+ $('home').style.display='none';$('results').classList.add('hidden');$('quiz').style.display='block';
+ render();clearInterval(tick);tick=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0)submit(true)},1000);
+}
+function updateTimer(){let m=Math.floor(timeLeft/60),s=timeLeft%60;$('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(timeLeft<300)$('timer').style.color='#c62828'}
+function render(){
+ let q=test[pos];$('counter').textContent=`Question ${pos+1} of ${test.length}`;
+ $('chapter').textContent=q[0];$('qnum').textContent=`QUESTION ${pos+1}`;$('qtext').textContent=q[1];
+ $('options').innerHTML='';
+ q[2].forEach((op,i)=>{let lab=document.createElement('label');lab.className='option';let inp=document.createElement('input');inp.type='radio';inp.name='answer';inp.value=i;inp.checked=answers[pos]===i;inp.addEventListener('change',()=>{answers[pos]=i;updateProgress()});lab.append(inp,document.createTextNode(String.fromCharCode(65+i)+'. '+op));$('options').append(lab)});
+ $('prev').disabled=pos===0;$('next').textContent=pos===test.length-1?'Review last':'Next';
+ updateProgress();
+}
+function updateProgress(){let done=Object.keys(answers).length;$('answered').textContent=`Answered: ${done}/${test.length}`;$('bar').style.width=(done/test.length*100)+'%'}
+$('start').onclick=startTest;
+$('prev').onclick=()=>{if(pos>0){pos--;render()}};
+$('next').onclick=()=>{if(pos<test.length-1){pos++;render()}else{alert('You are on the last question. Submit when ready.')}};
+$('end').onclick=()=>submit(false);
+function submit(auto){
+ if(finished)return;
+ let unanswered=test.length-Object.keys(answers).length;
+ if(!auto&&!confirm(`Submit your test? ${unanswered} question(s) are unanswered.`))return;
+ finished=true;clearInterval(tick);
+ let score=0;test.forEach((q,i)=>{if(answers[i]===q[3])score++});
+ let pct=Math.round(score/test.length*100);
+ $('quiz').style.display='none';$('results').classList.remove('hidden');
+ let html=`<h2>Test Result</h2><div class="stats"><div class="stat"><b>${score}/${test.length}</b> Score</div><div class="stat"><b>${pct}%</b> Percentage</div><div class="stat"><b>${Object.keys(answers).length}</b> Attempted</div><div class="stat"><b>${unanswered}</b> Unanswered</div></div>`;
+ html+=`<p><b>${pct>=90?'Excellent work!':pct>=75?'Good effort!':pct>=50?'Keep practising.':'Revise the concepts and try again.'}</b></p><h3>Chapter-wise score</h3>`;
+ chapters.forEach(ch=>{let qs=test.map((q,i)=>({q,i})).filter(x=>x.q[0]===ch);let sc=qs.filter(x=>answers[x.i]===x.q[3]).length;html+=`<p>${ch}: <b>${sc}/${qs.length}</b></p>`});
+ html+='<h3>Answer review</h3><p class="small">Correct answers and explanations are shown below. Focus on the questions you missed.</p>';
+ test.forEach((q,i)=>{let ok=answers[i]===q[3];html+=`<div class="reviewitem"><b>Q${i+1}. ${q[1]}</b><p class="${ok?'correct':'wrong'}">${ok?'Correct':'Incorrect / Not answered'} • Correct answer: ${String.fromCharCode(65+q[3])}. ${q[2][q[3]]}</p><p class="small"><b>Chapter:</b> ${q[0]}</p><p>${q[4]}</p></div>`});
+ html+='<button id="again">Take New Random Test</button> <button class="secondary" id="homebtn">Home</button>';
+ $('results').innerHTML=html;$('again').onclick=()=>{$('home').style.display='block';$('results').classList.add('hidden');startTest()};$('homebtn').onclick=()=>{$('home').style.display='block';$('results').classList.add('hidden')};
+ window.scrollTo(0,0);
+}
+</script>
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {})); }</script>
+</body></html>
